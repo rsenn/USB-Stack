@@ -163,11 +163,12 @@
 
 // PIC18F24K50 and PIC18FX5K50 Settings.
 #elif defined(_18F24K50) || defined(_18F25K50) || defined(_18F45K50)
-#define PICDEM  0 // Compatible with DM163025-1 https://www.microchip.com/DevelopmentTools/ProductDetails/DM163025-1.
-#define P_STAR  1 // Compatible with Pololu's P-Star dev boards https://www.pololu.com/category/217/p-star-programmable-controllers.
-#define GENERAL 2 // Compatible with dev boards that have a reset button.
-#define CUSTOM  3 // Write your own.
-#define BOARD_VERSION PICDEM
+#define PICDEM   0 // Compatible with DM163025-1 https://www.microchip.com/DevelopmentTools/ProductDetails/DM163025-1.
+#define P_STAR   1 // Compatible with Pololu's P-Star dev boards https://www.pololu.com/category/217/p-star-programmable-controllers.
+#define GENERAL  2 // Compatible with dev boards that have a reset button.
+#define PINGUINO 3 // Pinguino
+#define CUSTOM   4 // Write your own.
+#define BOARD_VERSION PINGUINO
 
 #if BOARD_VERSION == PICDEM
 #define XTAL_USED         NO_XTAL
@@ -204,10 +205,22 @@
 #define BUTTON_WPU        TRISE
 #define BUTTON_ACTIVE_LOW
 
+#elif BOARD_VERSION == PINGUINO
+#define XTAL_USED         NO_XTAL
+#define BUTTON_PORT_BIT   3
+#define BUTTON_PORT       PORTE
+#define BUTTON_WPU_BIT    7
+#define BUTTON_WPU        TRISE
+#define BUTTON_ACTIVE_LOW
+#define USE_BOOT_LED        // Uncomment if you wish to have a Bootloader LED.
+#define LED_BIT             4
+#define LED_LAT             LATA
+#define LED_TRIS            TRISA
+
 #elif BOARD_VERSION == CUSTOM
 #define XTAL_USED           // Select oscillator option.
-#define USE_MCLRE           // Uncomment to enable MCLRE (reset pin).
-#define USE_LVP             // Uncomment if LVP (Low Voltage Programming) is needed.
+//#define USE_MCLRE           // Uncomment to enable MCLRE (reset pin).
+//#define USE_LVP             // Uncomment if LVP (Low Voltage Programming) is needed.
 #define BUTTON_PORT_BIT     // Bootloader Button's bit in the I/O PORT.
 #define BUTTON_PORT         // Bootloader Button's I/O PORT.
 //#define BUTTON_ANSEL_BIT  // Uncomment and define the Bootloader Button's pin to make digital (if needed).

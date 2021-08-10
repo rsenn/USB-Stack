@@ -101,7 +101,7 @@ static void send_key(uint8_t modifier, uint8_t key_code);
 static void send_consumer(uint8_t consumer_val);
 static void print_keys(const uint8_t * str);
 
-static const uint8_t message[] = "https://youtu.be/dQw4w9WgXcQ?t=43s\r";
+static const uint8_t message[] = "https://www.youtube.com/watch?v=b0B6S2Ca75Q\r";
 
 void main(void)
 {
