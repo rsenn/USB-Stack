@@ -26,21 +26,25 @@
 typedef LONG NTSTATUS;
 #endif
 
+
 #ifdef __MINGW32__
 #include <ntdef.h>
 #include <winbase.h>
 #endif
+
 
 #ifdef __CYGWIN__
 #include <ntdef.h>
 #define _wcsdup wcsdup
 #endif
 
+
 //#define HIDAPI_USE_DDK
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 	#include <setupapi.h>
 	#include <winioctl.h>
 	#ifdef HIDAPI_USE_DDK
@@ -56,6 +60,7 @@ extern "C" {
 } // extern "C"
 #endif
 
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -67,9 +72,11 @@ extern "C" {
 	#pragma warning(disable:4996)
 #endif
 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 
 #ifndef HIDAPI_USE_DDK
 	// Since we're not building with the DDK, and the HID header
@@ -120,7 +127,8 @@ extern "C" {
 
 	static HMODULE lib_handle = NULL;
 	static BOOLEAN initialized = FALSE;
-#endif // HIDAPI_USE_DDK
+#endif
+
 
 struct hid_device_ {
 		HANDLE device_handle;
@@ -205,6 +213,7 @@ static int lookup_functions()
 }
 #endif
 
+
 static HANDLE open_device(const char *path)
 {
 	HANDLE handle;
@@ -247,6 +256,7 @@ int HID_API_EXPORT hid_init(void)
 		initialized = TRUE;
 	}
 #endif
+
 	return 0;
 }
 
@@ -258,6 +268,7 @@ int HID_API_EXPORT hid_exit(void)
 	lib_handle = NULL;
 	initialized = FALSE;
 #endif
+
 	return 0;
 }
 
@@ -729,6 +740,7 @@ int HID_API_EXPORT HID_API_CALL hid_get_feature_report(hid_device *dev, unsigned
 	}
 	return bytes_returned;
 #endif
+
 }
 
 void HID_API_EXPORT HID_API_CALL hid_close(hid_device *dev)
@@ -810,16 +822,19 @@ HID_API_EXPORT const wchar_t * HID_API_CALL  hid_error(hid_device *dev)
 	unsigned short ProductID = 0x0001;
 #endif
 
+
 #ifdef P32
   unsigned short VendorID = 0x04d8;
 	unsigned short ProductID = 0x3f;
 #endif
 
 
+
 #ifdef PICPGM
   unsigned short VendorID = 0x04d8;
   unsigned short ProductID = 0x0033;
 #endif
+
 
 
 #if 0
@@ -868,6 +883,9 @@ int __cdecl main(int argc, char* argv[])
 }
 #endif
 
+
 #ifdef __cplusplus
 } // extern "C"
 #endif
+
+

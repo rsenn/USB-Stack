@@ -230,6 +230,7 @@ static void register_error(hid_device *device, const char *op)
 #endif
 
 
+
 static int32_t get_int_property(IOHIDDeviceRef device, CFStringRef key)
 {
 	CFTypeRef ref;
@@ -1120,3 +1121,5 @@ int main(void)
 	return 0;
 }
 #endif
+
+

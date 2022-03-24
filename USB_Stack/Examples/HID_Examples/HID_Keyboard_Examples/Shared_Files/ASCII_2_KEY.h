@@ -43,4 +43,5 @@ extern Key_Result_t g_key_result;
 
 void ascii_2_key(uint8_t val);
 
-#endif /* ASCII_2_KEY_H */
+#endif
+

@@ -94,6 +94,7 @@
 #error "RubberDucky Example needs usb interrupt method, because blocking is used."
 #endif
 
+
 static void example_init(void);
 static void flash_led(void);
 static void __interrupt() isr(void);
@@ -291,3 +292,4 @@ static void __interrupt() isr(void)
         USB_INTERRUPT_FLAG = 0;
     }
 }
+

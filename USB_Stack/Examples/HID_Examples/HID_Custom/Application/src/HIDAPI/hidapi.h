@@ -37,11 +37,13 @@
       #define HID_API_CALL /**< API call macro */
 #endif
 
+
 #define HID_API_EXPORT_CALL HID_API_EXPORT HID_API_CALL /**< API export and call macro*/
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 		struct hid_device_;
 		typedef struct hid_device_ hid_device; /**< opaque hidapi structure */
 
@@ -379,5 +381,8 @@ extern "C" {
 }
 #endif
 
+
 #endif
+
+
 

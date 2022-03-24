@@ -56,3 +56,4 @@ void DemoApp::update_gui(bool isConnected, bool isPressed, int potentiometerValu
         ui->progressBar->setValue(0);
     }
 }
+

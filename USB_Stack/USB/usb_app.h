@@ -104,4 +104,4 @@ bool usb_app_get_interface(uint8_t* alternate_setting_result, uint8_t interface)
 
 /* ************************************************************************** */
 
-#endif /* USB_APP_H */
+#endif

@@ -97,6 +97,7 @@ void UART1_Write_Text(uint8_t *UART_text){
 }
 #endif
 
+
 #ifdef __XC8
 #if NUM_UARTS >= 1
 /* ************************* UART1 ************************* */
@@ -105,7 +106,8 @@ void UART1_Write_Text(uint8_t *UART_text){
 #else
 #define UART1_CALC (((((float)CLOCK_FREQ/UART1_BAUD)/4)-1)+0.5)
 #define UART1_CALC_H (UART1_CALC/256)
-#endif /* BAUD_8BITS */
+#endif
+
 void UART1_Init(void) {
 #ifdef HAS_PPS1
     PPSLOCK = PPS_UNLOCKED;
@@ -113,6 +115,7 @@ void UART1_Init(void) {
     PPS_TX1_REG = PPS_TX1_VAL;
     PPSLOCK = PPS_LOCKED;
 #endif
+
     UART1_TX_TRIS = 1;
     UART1_RX_TRIS = 1;
 
@@ -123,6 +126,7 @@ void UART1_Init(void) {
     BAUDCONbits.BRG16 = 1; // 16-bit baud rate generator
     SPBRGH = (uint8_t)UART1_CALC_H;
 #endif
+
 
     TXSTAbits.SYNC = 0;
     TXSTAbits.TXEN = 1; // Enable transmitter
@@ -206,6 +210,7 @@ void UART1_Write_Const_Text(const uint8_t *UART_text){
     }
 }
 #endif
+
 #if NUM_UARTS >= 2
 /* ************************* UART2 ************************* */
 #ifdef BAUD_8BITS
@@ -213,7 +218,8 @@ void UART1_Write_Const_Text(const uint8_t *UART_text){
 #else
 #define UART2_CALC (((((float)CLOCK_FREQ/UART2_BAUD)/4)-1)+0.5)
 #define UART2_CALC_H (UART2_CALC/256)
-#endif /* BAUD_8BITS */
+#endif
+
 void UART2_Init(void) {
 #ifdef HAS_PPS2
     PPSLOCK = PPS_UNLOCKED;
@@ -221,6 +227,7 @@ void UART2_Init(void) {
     PPS_TX2_REG = PPS_TX2_VAL;
     PPSLOCK = PPS_LOCKED;
 #endif
+
     UART2_TX_TRIS = 1;
     UART2_RX_TRIS = 1;
 
@@ -231,6 +238,7 @@ void UART2_Init(void) {
     BAUDCON2bits.BRG16 = 1; // 16-bit baud rate generator
     SPBRGH2 = (uint8_t)UART2_CALC_H;
 #endif
+
 
     TXSTA2bits.SYNC = 0;
     TXSTA2bits.TXEN = 1; // Enable transmitter
@@ -313,5 +321,7 @@ void UART2_Write_Const_Text(const uint8_t *UART_text){
         UART2_Write_Const(*UART_text++);
     }
 }
-#endif /* NUM_UARTS >= 2 */
-#endif /* __XC8 */
+#endif
+
+#endif
+

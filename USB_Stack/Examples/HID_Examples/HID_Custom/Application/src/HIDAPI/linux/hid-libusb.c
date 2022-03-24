@@ -49,11 +49,13 @@
 extern "C" {
 #endif
 
+
 #ifdef DEBUG_PRINTF
 #define LOG(...) fprintf(stderr, __VA_ARGS__)
 #else
 #define LOG(...) do {} while (0)
 #endif
+
 
 
 /* Uncomment to enable the retrieval of Usage and Usage Page in
@@ -149,6 +151,7 @@ static void register_error(hid_device *device, const char *op)
 
 }
 #endif
+
 
 #ifdef INVASIVE_GET_USAGE
 /* Get bytes from a HID Report Descriptor.
@@ -250,7 +253,8 @@ static int get_usage(uint8_t *report_descriptor, size_t size,
 	
 	return -1; /* failure */
 }
-#endif // INVASIVE_GET_USAGE
+#endif
+
 
 
 /* Get the first language the device says it reports. This comes from
@@ -537,7 +541,8 @@ struct hid_device_info  HID_API_EXPORT *hid_enumerate(unsigned short vendor_id, 
 									if (res < 0)
 										LOG("Couldn't re-attach kernel driver.\n");
 								}
-#endif /*******************/
+#endif
+
 
 								libusb_close(handle);
 							}
@@ -953,6 +958,7 @@ int HID_API_EXPORT hid_read_timeout(hid_device *dev, unsigned char *data, size_t
 	LOG("transferred: %d\n", transferred);
 	return transferred;
 #endif
+
 
 	pthread_mutex_lock(&dev->mutex);
 	pthread_cleanup_push(&cleanup_mutex, dev);
@@ -1373,6 +1379,7 @@ uint16_t get_usb_code_for_current_locale(void)
 		lang++;
 	}
 #endif
+
 	
 	/* Found nothing. */
 	return 0x0;
@@ -1381,3 +1388,5 @@ uint16_t get_usb_code_for_current_locale(void)
 #ifdef __cplusplus
 }
 #endif
+
+

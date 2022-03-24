@@ -33,6 +33,7 @@
 #define UART1_TX_TRIS TRISCbits.TRISC4
 #define UART1_RX_TRIS TRISCbits.TRISC5
 #endif
+
 #elif defined(__16F87) || defined(__16F88)
 #define BAUD_8BITS
 #define NUM_UARTS 1
@@ -103,6 +104,7 @@
 #error UART - DEVICE NOT YET SUPPORTED
 #endif
 
+
 #include <stdint.h>
 
 #if NUM_UARTS >= 1
@@ -118,6 +120,7 @@ void UART1_Write_Text(uint8_t *UART_text);
 void UART1_Write_Const_Text(const uint8_t *UART_text);
 #endif
 
+
 #if NUM_UARTS >= 2
 /* *********** UART2 ************ */
 void UART2_Init(void);
@@ -131,4 +134,6 @@ void UART2_Write_Text(uint8_t *UART_text);
 void UART2_Write_Const_Text(const uint8_t *UART_text);
 #endif
 
-#endif /* UART_H */
+
+#endif
+

@@ -43,6 +43,7 @@
 #define _EEDATH EEDATH
 #endif
 
+
 #if defined(_PIC14)||defined(_PIC14E) 
 void Flash_ReadBytes(uint16_t start_addr, uint16_t bytes, uint8_t *flash_array)
 {
@@ -101,6 +102,7 @@ void Flash_EraseWriteBlock(uint16_t start_addr, uint8_t *flash_array)
     Flash_Erase(start_addr,start_addr + _FLASH_ERASE_SIZE);
     Flash_WriteBlock(start_addr, flash_array);
 #endif
+
 }
 void Flash_WriteBlock(uint16_t start_addr, uint8_t *flash_array)
 {
@@ -151,6 +153,7 @@ void Flash_WriteBlock(uint16_t start_addr, uint8_t *flash_array)
     NOP();
     _EECON1bits.WREN = 0;
 #endif
+
 }
 #elif defined(_PIC18)
 void Flash_ReadBytes(uint24_t start_addr, uint24_t bytes, uint8_t *flash_array)
@@ -208,6 +211,7 @@ void Flash_EraseWriteBlock(uint24_t start_addr, uint8_t *flash_array)
     Flash_Erase(start_addr,start_addr + _FLASH_ERASE_SIZE);
     Flash_WriteBlock(start_addr, flash_array);
 #endif
+
 }
 void Flash_WriteBlock(uint24_t start_addr, uint8_t *flash_array)
 {
@@ -231,3 +235,4 @@ void Flash_WriteBlock(uint24_t start_addr, uint8_t *flash_array)
 #else
 #error FLASH - DEVICE NOT YET SUPPORTED
 #endif
+

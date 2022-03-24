@@ -112,4 +112,4 @@
 #define _VOL_INC         0x40
 #define _VOL_DEC         0x80
 
-#endif /* USB_HID_CONFIG_H */
+#endif

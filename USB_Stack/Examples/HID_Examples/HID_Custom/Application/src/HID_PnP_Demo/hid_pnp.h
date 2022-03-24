@@ -38,4 +38,6 @@ private:
     void CloseDevice();
 };
 
-#endif // HID_PNP_H
+#endif
+
+

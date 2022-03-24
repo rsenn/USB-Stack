@@ -10,6 +10,7 @@
 #else
 #pragma config FOSC = HS
 #endif
+
 #pragma config WDTE = SWDTEN    // Watchdog Timer Enable (WDT controlled by the SWDTEN bit in the WDTCON register)
 #pragma config PWRTE = ON       // Power-up Timer Enable (PWRT enabled)
 #ifdef USE_MCLRE
@@ -17,6 +18,7 @@
 #else
 #pragma config MCLRE = OFF
 #endif
+
 #pragma config CP = OFF         // Flash Program Memory Code Protection (Program memory code protection is disabled)
 #pragma config BOREN = SBODEN   // Brown-out Reset Enable (Brown-out Reset controlled by the SBOREN bit in the BORCON register)
 #pragma config CLKOUTEN = OFF   // Clock Out Enable (CLKOUT function is disabled. I/O or oscillator function on the CLKOUT pin)
@@ -37,6 +39,7 @@
 #else
 #pragma config LVP = OFF
 #endif
+
 
 
 #elif defined(_18F14K50) || defined(_18F13K50)
@@ -68,6 +71,7 @@
 #pragma config MCLRE = OFF
 #endif
 
+
 // CONFIG4L
 #pragma config STVREN = ON      // Stack Full/Underflow Reset Enable bit (Stack full/underflow will cause Reset)
 #ifdef USE_LVP
@@ -75,6 +79,7 @@
 #else
 #pragma config LVP = OFF
 #endif
+
 #pragma config BBSIZ = OFF      // Boot Block Size Select bit (1kW boot block size)
 #pragma config XINST = OFF      // Extended Instruction Set Enable bit (Instruction set extension and Indexed Addressing mode disabled (Legacy mode))
 
@@ -116,6 +121,7 @@
 #else
 #pragma config FOSC = HSH
 #endif
+
 #pragma config PCLKEN = OFF     // Primary Oscillator Shutdown (Primary oscillator shutdown firmware controlled)
 #pragma config FCMEN = OFF      // Fail-Safe Clock Monitor (Fail-Safe Clock Monitor disabled)
 #pragma config IESO = OFF       // Internal/External Oscillator Switchover (Oscillator Switchover mode disabled)
@@ -141,6 +147,7 @@
 #pragma config MCLRE = OFF
 #endif
 
+
 // CONFIG4L
 #pragma config STVREN = ON      // Stack Full/Underflow Reset (Stack full/underflow will cause Reset)
 #ifdef USE_LVP
@@ -148,6 +155,7 @@
 #else
 #pragma config LVP = OFF
 #endif
+
 #pragma config ICPRT = OFF      // Dedicated In-Circuit Debug/Programming Port Enable (ICPORT disabled)
 #pragma config XINST = OFF      // Extended Instruction Set Enable bit (Instruction set extension and Indexed Addressing mode disabled)
 
@@ -158,6 +166,7 @@
 #pragma config CP2 = OFF        // Block 2 Code Protect (Block 2 is not code-protected)
 #pragma config CP3 = OFF        // Block 3 Code Protect (Block 3 is not code-protected)
 #endif
+
 
 // CONFIG5H
 #pragma config CPB = OFF        // Boot Block Code Protect (Boot block is not code-protected)
@@ -171,6 +180,7 @@
 #pragma config WRT3 = OFF       // Block 3 Write Protect (Block 3 (06000-7FFFh) is not write-protected)
 #endif
 
+
 // CONFIG6H
 #pragma config WRTC = ON        // Configuration Registers Write Protect (Configuration registers (300000-3000FFh) are write-protected)
 #pragma config WRTB = ON        // Boot Block Write Protect (Boot block (0000-7FFh) is write-protected)
@@ -183,6 +193,7 @@
 #pragma config EBTR2 = OFF      // Block 2 Table Read Protect (Block 2 is not protected from table reads executed in other blocks)
 #pragma config EBTR3 = OFF      // Block 3 Table Read Protect (Block 3 is not protected from table reads executed in other blocks)
 #endif
+
 
 // CONFIG7H
 #pragma config EBTRB = OFF      // Boot Block Table Read Protect (Boot block is not protected from table reads executed in other blocks)
@@ -213,7 +224,9 @@
 #else
 #error XTAL_USED has invalid paramater
 #endif
+
 #endif
+
 #pragma config CFGPLLEN = OFF   // PLL Enable Configuration Bit (PLL Disabled)
 #pragma config STVREN = ON      // Stack Overflow/Underflow Reset (Enabled)
 #pragma config XINST = OFF      // Extended Instruction Set (Disabled)
@@ -254,6 +267,8 @@
 #pragma config LS48MHZ = SYS48X8// Low Speed USB mode with 48 MHz system clock bit (System clock at 48 MHz USB CLKEN divide-by is set to 8)
 #endif
 
+
 #include <xc.h>
 
-#endif /* FUSES_H */
+#endif
+

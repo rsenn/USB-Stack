@@ -49,9 +49,11 @@
 #ifndef HIDIOCSFEATURE
 #define HIDIOCSFEATURE(len)    _IOC(_IOC_WRITE|_IOC_READ, 'H', 0x06, len)
 #endif
+
 #ifndef HIDIOCGFEATURE
 #define HIDIOCGFEATURE(len)    _IOC(_IOC_WRITE|_IOC_READ, 'H', 0x07, len)
 #endif
+
 
 struct hid_device_ {
 	int device_handle;
@@ -593,3 +595,4 @@ HID_API_EXPORT const wchar_t * HID_API_CALL  hid_error(hid_device *dev)
 {
 	return NULL;
 }
+

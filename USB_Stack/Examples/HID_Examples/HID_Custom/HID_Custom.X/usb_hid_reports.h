@@ -50,4 +50,5 @@ extern volatile hid_out_report1_t g_hid_out_report1;
 extern const    uint16_t          g_hid_out_reports[];
 extern const    uint8_t           g_hid_out_report_size[];
 
-#endif /* USB_HID_REPORTS_H */
+#endif
+

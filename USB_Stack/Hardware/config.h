@@ -44,6 +44,7 @@
 #define MHz_48 12
 #endif
 
+
 #define _XTAL_FREQ          48000000      // Don't modify.
 #define PLL_STARTUP_DELAY() __delay_ms(3) // Don't modify.
 
@@ -105,6 +106,7 @@
 //#define LED_ACTIVE_LOW    // Uncomment to make the Bootloader LED active low.
 #endif
 
+
 // PIC18F14K50 Settings:
 #elif defined(_18F13K50) || defined(_18F14K50)
 #define DM164127 0 // Compatible with DM164127-2/DV164139-2 https://www.microchip.com/developmenttools/ProductDetails/PartNO/DM164127-2.
@@ -160,6 +162,7 @@
 #define LED_TRIS            // Bootloader LED's TRIS register.
 //#define LED_ACTIVE_LOW    // Uncomment to make the Bootloader LED active low.
 #endif
+
 
 // PIC18F24K50 and PIC18FX5K50 Settings.
 #elif defined(_18F24K50) || defined(_18F25K50) || defined(_18F45K50)
@@ -235,6 +238,7 @@
 //#define LED_ACTIVE_LOW    // Uncomment to make the Bootloader LED active low.
 #endif
 
+
 // PIC18FX6J53 and PIC18FX7J53 Settings.
 #elif defined(__J_PART)
 #define PIM          0 // Compatible with Microchip's MA180029 dev board https://www.microchip.com/DevelopmentTools/ProductDetails/PartNO/MA180029.
@@ -291,7 +295,9 @@
 #define LED_TRIS            // Bootloader LED's TRIS register.
 //#define LED_ACTIVE_LOW    // Uncomment to make the Bootloader LED active low.
 #endif
+
 #endif
+
 
 #ifndef BUTTON_ACTIVE_LOW
     #define BUTTON_PRESSED  (BUTTON_PORT & (1 << BUTTON_PORT_BIT))
@@ -300,6 +306,7 @@
     #define BUTTON_PRESSED  !(BUTTON_PORT & (1 << BUTTON_PORT_BIT))
     #define BUTTON_RELEASED (BUTTON_PORT & (1 << BUTTON_PORT_BIT))
 #endif
+
         
 #ifndef LED_ACTIVE_LOW
     #define LED_ON()  LED_LAT |= (1 << LED_BIT)
@@ -309,6 +316,7 @@
     #define LED_OFF() LED_LAT |= (1 << LED_BIT)
 #endif
 
+
 #define LED_OUPUT() LED_TRIS &= ~(1 << LED_BIT)
 
 // WPUE3 (pull-up for RE3/MCLRE) needs to be accessible with PIC18F2XK50 (28 pin devices).
@@ -317,4 +325,7 @@
 uint8_t TRISE __at(0xF96); // This shouldn't be missing!!
 #endif
 
-#endif /* CONFIG_H */
+
+#endif
+
+

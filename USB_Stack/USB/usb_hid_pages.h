@@ -988,4 +988,4 @@
 #define VENDOR_DEFINED_PAGE          0xFF00
 
 
-#endif /* HID_PAGES_H */
+#endif

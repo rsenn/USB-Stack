@@ -69,4 +69,5 @@ extern const    uint8_t           g_hid_in_report_size[];
 //extern const    uint16_t          g_hid_out_reports[];
 //extern const    uint8_t           g_hid_out_report_size[];
 
-#endif /* USB_HID_REPORTS_H */
+#endif
+

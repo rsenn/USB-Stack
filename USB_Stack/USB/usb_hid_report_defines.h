@@ -105,4 +105,4 @@
 #define String_Maximum(x)     0x98|ONE_BYTES, x
 #define Delimeter(x)          0xA8|ONE_BYTES, x
 
-#endif /* HID_REPORT_DEFINES_H */
+#endif

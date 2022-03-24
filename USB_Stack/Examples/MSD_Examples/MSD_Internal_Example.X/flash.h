@@ -35,6 +35,8 @@ void Flash_Erase(uint24_t start_addr, uint24_t end_addr);
 void Flash_EraseWriteBlock(uint24_t start_addr, uint8_t *flash_array);
 void Flash_WriteBlock(uint24_t start_addr, uint8_t *flash_array);
 void Flash_WriteConfigBlock(uint8_t *flash_array);
-#endif /* _PIC18 */
+#endif
 
-#endif /* FLASH_H */
+
+#endif
+

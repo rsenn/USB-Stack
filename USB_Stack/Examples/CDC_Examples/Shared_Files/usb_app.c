@@ -76,6 +76,7 @@ bool usb_app_set_interface(uint8_t alternate_setting, uint8_t interface)
     }
     else return false;
 #endif
+
 }
 
 
@@ -84,6 +85,7 @@ bool usb_app_get_interface(uint8_t* alternate_setting_result, uint8_t interface)
 #if NUM_ALT_INTERFACES != 0
     if(g_get_interface.Interface < NUM_INTERFACES) return false;
 #endif
+
     return false;
 }
 

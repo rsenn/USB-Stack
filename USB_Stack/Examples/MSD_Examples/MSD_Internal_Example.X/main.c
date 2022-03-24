@@ -51,6 +51,7 @@
 #else                  // Standard/Pro Version - put ROM range as 0-1FFF
 #define FLASH_SPACE_START     0x01000
 #endif
+
 #define END_OF_FLASH          0x02000
 
 #define BOOT_START            (FLASH_SPACE_START)
@@ -223,6 +224,7 @@
 #define FAT_DEFAULT_SIZE      4
 #define ROOT_ENTRY_START      (FLASH_SPACE_START + 2048)
 #endif
+
 
 /*
  * The code directly below will pre-format the drive in such a way that we make use of most of the space.

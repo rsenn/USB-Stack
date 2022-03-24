@@ -89,3 +89,4 @@ void HID_PnP::CloseDevice() {
     hid_comm_update(isConnected, pushbuttonStatus, potentiometerValue);
     timer->start(250);
 }
+
