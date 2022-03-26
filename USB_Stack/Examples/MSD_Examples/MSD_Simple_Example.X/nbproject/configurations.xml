@@ -57,7 +57,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>noID</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>2.31</languageToolchainVersion>
+        <languageToolchainVersion>1.45</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <packs>
@@ -268,7 +268,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>noID</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>2.20</languageToolchainVersion>
+        <languageToolchainVersion>1.45</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <packs>
@@ -479,7 +479,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>noID</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>2.20</languageToolchainVersion>
+        <languageToolchainVersion>1.45</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <packs>
@@ -690,7 +690,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>noID</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>2.20</languageToolchainVersion>
+        <languageToolchainVersion>1.45</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <packs>
@@ -901,7 +901,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>noID</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>2.20</languageToolchainVersion>
+        <languageToolchainVersion>1.45</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <packs>
@@ -1112,7 +1112,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>noID</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>2.20</languageToolchainVersion>
+        <languageToolchainVersion>1.45</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <packs>
@@ -1323,7 +1323,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>noID</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>2.31</languageToolchainVersion>
+        <languageToolchainVersion>1.45</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <packs>
@@ -1534,7 +1534,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>noID</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>2.20</languageToolchainVersion>
+        <languageToolchainVersion>1.45</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <packs>
@@ -1745,7 +1745,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>noID</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>2.20</languageToolchainVersion>
+        <languageToolchainVersion>1.45</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <packs>
@@ -1956,7 +1956,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>noID</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>2.20</languageToolchainVersion>
+        <languageToolchainVersion>1.45</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <packs>
@@ -2167,7 +2167,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>noID</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>2.20</languageToolchainVersion>
+        <languageToolchainVersion>1.45</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <packs>
@@ -2378,7 +2378,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>noID</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>2.20</languageToolchainVersion>
+        <languageToolchainVersion>1.45</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <packs>
