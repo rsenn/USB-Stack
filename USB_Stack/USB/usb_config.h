@@ -28,12 +28,23 @@
 /* **************************** SELECT EXAMPLE ****************************** */
 /* ************************************************************************** */
 
+// An example can also be selected from the command line (e.g. -DMIDI_CONTROLLER_EXAMPLE),
+// in which case the default selection below is skipped.
+#if !defined(CDC_EXAMPLE)           && !defined(HID_CUSTOM_EXAMPLE)   && \
+    !defined(HID_KEYBOARD_EXAMPLE)  && !defined(HID_MOUSE_EXAMPLE)    && \
+    !defined(MSD_INTERNAL_EXAMPLE)  && !defined(MSD_SIMPLE_EXAMPLE)   && \
+    !defined(MIDI_CONTROLLER_EXAMPLE) && !defined(MIDI_SYNTH_EXAMPLE)
+
 #define CDC_EXAMPLE
 //#define HID_CUSTOM_EXAMPLE
 //#define HID_KEYBOARD_EXAMPLE
 //#define HID_MOUSE_EXAMPLE
 //#define MSD_INTERNAL_EXAMPLE
 //#define MSD_SIMPLE_EXAMPLE
+//#define MIDI_CONTROLLER_EXAMPLE
+//#define MIDI_SYNTH_EXAMPLE
+
+#endif
 
 /* ************************************************************************** */
 
@@ -88,6 +99,16 @@
 #define NUM_ENDPOINTS      2
 #define EP0_SIZE           8
 #define EP1_SIZE           16
+
+#elif defined(MIDI_CONTROLLER_EXAMPLE) || defined(MIDI_SYNTH_EXAMPLE)
+// USB MIDI 1.0 always presents two interfaces: AudioControl + MIDIStreaming.
+// EP1 carries 4-byte USB-MIDI event packets (bulk).
+#define NUM_CONFIGURATIONS 1
+#define NUM_INTERFACES     2
+#define NUM_ALT_INTERFACES 0
+#define NUM_ENDPOINTS      2
+#define EP0_SIZE           8
+#define EP1_SIZE           64
 #else
 // MAKE YOUR OWN
 #endif
@@ -143,6 +164,32 @@
 //#define USE_IDLE
 //#define USE_ACTIVITY
 #define USE_SOF
+//#define USE_OUT_CONTROL_FINISHED
+
+
+#elif defined(MIDI_CONTROLLER_EXAMPLE)
+// SOF gives the controller a free 1ms tick for key debouncing and pot scanning.
+#define INTERRUPTS_MASK (_IDLEIE | _TRNIE | _ACTVIE | _URSTIE | _SOFIE)
+#define ERROR_INTERRUPT_MASK 0
+
+//#define USE_RESET
+//#define USE_ERROR
+//#define USE_IDLE
+//#define USE_ACTIVITY
+#define USE_SOF
+//#define USE_OUT_CONTROL_FINISHED
+
+
+#elif defined(MIDI_SYNTH_EXAMPLE)
+// The synth keeps its own time from the audio sample timer, so no SOF needed.
+#define INTERRUPTS_MASK (_IDLEIE | _TRNIE | _ACTVIE | _URSTIE)
+#define ERROR_INTERRUPT_MASK 0
+
+//#define USE_RESET
+//#define USE_ERROR
+//#define USE_IDLE
+//#define USE_ACTIVITY
+//#define USE_SOF
 //#define USE_OUT_CONTROL_FINISHED
 
 
