@@ -21,7 +21,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <xc.h>
+#include "usb_compiler.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include "usb.h"
@@ -58,11 +58,16 @@
 #define USB_SUSPEND                         UCONbits.SUSPND
 
 #if defined(_18F13K50) || defined(_18F14K50)
+#if USB_SDCC
+/* SDCC's pic18f14k50.h has a correct USTATbits, so no override is needed. */
+#define _USTATbits USTATbits
+#else
 struct // PIC18F14K50.h is outdated
 {
     unsigned      :3;
     unsigned ENDP :4;
 }_USTATbits __at(0xF63);
+#endif
 #else
 #define _USTATbits USTATbits
 #endif
@@ -72,11 +77,17 @@ struct // PIC18F14K50.h is outdated
 /* ************************************************************************** */
 
 usb_ustat_t             g_usb_last_USTAT;
+/* Under SDCC these names are pointer macros from usb.h; only the extra local
+ * view, g_get_interface, is declared here. See usb_compiler.h. */
+#if USB_SDCC
+#define g_get_interface USB_ABS_OBJ(ch9_get_interface_t, SETUP_DATA_ADDR)
+#else
 ch9_setup_t             g_usb_setup             __at(SETUP_DATA_ADDR);
 ch9_get_descriptor_t    g_usb_get_descriptor    __at(SETUP_DATA_ADDR);
 ch9_set_configuration_t g_usb_set_configuration __at(SETUP_DATA_ADDR);
 ch9_set_interface_t     g_usb_set_interface     __at(SETUP_DATA_ADDR);
 ch9_get_interface_t     g_get_interface         __at(SETUP_DATA_ADDR);
+#endif
 
 usb_ep_stat_t       g_usb_ep_stat[NUM_ENDPOINTS][2];
 uint16_t            g_usb_bytes_available;
@@ -86,12 +97,19 @@ bool                g_usb_send_short;
 uint8_t             g_usb_sending_from;
 const uint8_t      *g_usb_rom_ptr;
 uint8_t            *g_usb_ram_ptr;
+#if USB_SDCC
+/* One block covering the whole USB RAM window, so the linker keeps out of it.
+ * Every buffer in here (BDT, EP0, class endpoints) is a pointer macro. */
+USB_RESERVE(g_usb_ram_reservation, USB_RAM_SIZE, BDT_BASE_ADDR);
+USB_RESERVE(g_usb_setup_reservation, 8, SETUP_DATA_ADDR);
+#else
 bd_t                g_usb_bd_table[NUM_BD] __at(BDT_BASE_ADDR);
+#endif
 
 // The following are from: usb_descriptors.c
 extern const ch9_device_descriptor_t g_device_descriptor;
-extern const uint16_t                g_config_descriptors[];
-extern const uint16_t                g_string_descriptors[];
+extern const usb_desc_addr_t         g_config_descriptors[];
+extern const usb_desc_addr_t         g_string_descriptors[];
 extern const uint8_t                 g_size_of_sd;
 
 /* ************************************************************************** */
@@ -102,19 +120,55 @@ extern const uint8_t                 g_size_of_sd;
 /* ************************************************************************** */
 
 #if (PINGPONG_MODE == PINGPONG_DIS) || (PINGPONG_MODE == PINGPONG_1_15)
-static uint8_t m_ep0_out[EP0_SIZE]      __at(EP0_OUT_BUFFER_BASE_ADDR);
-static uint8_t m_ep0_in[EP0_SIZE]       __at(EP0_IN_BUFFER_BASE_ADDR);
+#if USB_SDCC
+#define m_ep0_out USB_ABS_ARR(uint8_t, EP0_OUT_BUFFER_BASE_ADDR)
+#else
+static uint8_t m_ep0_out[EP0_SIZE] __at(EP0_OUT_BUFFER_BASE_ADDR);
+#endif
+#if USB_SDCC
+#define m_ep0_in USB_ABS_ARR(uint8_t, EP0_IN_BUFFER_BASE_ADDR)
+#else
+static uint8_t m_ep0_in[EP0_SIZE] __at(EP0_IN_BUFFER_BASE_ADDR);
+#endif
 
 #elif (PINGPONG_MODE == PINGPONG_0_OUT)
-static uint8_t m_ep0_out_even[EP0_SIZE] __at(EP0_OUT_EVEN_BUFFER_BASE_ADDR);
-static uint8_t m_ep0_out_odd[EP0_SIZE]  __at(EP0_OUT_ODD_BUFFER_BASE_ADDR);
-static uint8_t m_ep0_in[EP0_SIZE]       __at(EP0_IN_BUFFER_BASE_ADDR);
-
+#if USB_SDCC
+#define m_ep0_out_even USB_ABS_ARR(uint8_t, EP0_OUT_EVEN_BUFFER_BASE_ADDR)
 #else
 static uint8_t m_ep0_out_even[EP0_SIZE] __at(EP0_OUT_EVEN_BUFFER_BASE_ADDR);
-static uint8_t m_ep0_out_odd[EP0_SIZE]  __at(EP0_OUT_ODD_BUFFER_BASE_ADDR);
-static uint8_t m_ep0_in_even[EP0_SIZE]  __at(EP0_IN_EVEN_BUFFER_BASE_ADDR);
-static uint8_t m_ep0_in_odd[EP0_SIZE]   __at(EP0_IN_ODD_BUFFER_BASE_ADDR);
+#endif
+#if USB_SDCC
+#define m_ep0_out_odd USB_ABS_ARR(uint8_t, EP0_OUT_ODD_BUFFER_BASE_ADDR)
+#else
+static uint8_t m_ep0_out_odd[EP0_SIZE] __at(EP0_OUT_ODD_BUFFER_BASE_ADDR);
+#endif
+#if USB_SDCC
+#define m_ep0_in USB_ABS_ARR(uint8_t, EP0_IN_BUFFER_BASE_ADDR)
+#else
+static uint8_t m_ep0_in[EP0_SIZE] __at(EP0_IN_BUFFER_BASE_ADDR);
+#endif
+
+#else
+#if USB_SDCC
+#define m_ep0_out_even USB_ABS_ARR(uint8_t, EP0_OUT_EVEN_BUFFER_BASE_ADDR)
+#else
+static uint8_t m_ep0_out_even[EP0_SIZE] __at(EP0_OUT_EVEN_BUFFER_BASE_ADDR);
+#endif
+#if USB_SDCC
+#define m_ep0_out_odd USB_ABS_ARR(uint8_t, EP0_OUT_ODD_BUFFER_BASE_ADDR)
+#else
+static uint8_t m_ep0_out_odd[EP0_SIZE] __at(EP0_OUT_ODD_BUFFER_BASE_ADDR);
+#endif
+#if USB_SDCC
+#define m_ep0_in_even USB_ABS_ARR(uint8_t, EP0_IN_EVEN_BUFFER_BASE_ADDR)
+#else
+static uint8_t m_ep0_in_even[EP0_SIZE] __at(EP0_IN_EVEN_BUFFER_BASE_ADDR);
+#endif
+#if USB_SDCC
+#define m_ep0_in_odd USB_ABS_ARR(uint8_t, EP0_IN_ODD_BUFFER_BASE_ADDR)
+#else
+static uint8_t m_ep0_in_odd[EP0_SIZE] __at(EP0_IN_ODD_BUFFER_BASE_ADDR);
+#endif
 #endif
 
 static usb_dev_settings_t  m_dev_settings;
@@ -124,9 +178,15 @@ static uint8_t             m_usb_state = STATE_DETACHED;
 static uint8_t             m_control_stage;
 static uint8_t             m_current_configuration;
 
+#if USB_SDCC
+#define m_get_status        USB_ABS_OBJ(ch9_get_status_t,        SETUP_DATA_ADDR)
+#define m_set_address       USB_ABS_OBJ(ch9_set_address_t,       SETUP_DATA_ADDR)
+#define m_set_clear_feature USB_ABS_OBJ(ch9_set_clear_feature_t, SETUP_DATA_ADDR)
+#else
 static ch9_get_status_t        m_get_status        __at(SETUP_DATA_ADDR);
 static ch9_set_address_t       m_set_address       __at(SETUP_DATA_ADDR);
 static ch9_set_clear_feature_t m_set_clear_feature __at(SETUP_DATA_ADDR);
+#endif
 
 /* ************************************************************************** */
 

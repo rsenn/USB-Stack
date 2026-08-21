@@ -25,7 +25,7 @@
 #define USB_CDC_CONFIG_H
 
 #include "usb_cdc.h"
-#include <xc.h>
+#include "usb_compiler.h"
 
 /* ************************************************************************** */
 /* ************************* SET LINE CODING SETTINGS *********************** */

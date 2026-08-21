@@ -23,12 +23,11 @@
 #ifndef USB_HAL_H
 #define USB_HAL_H
 
-#include <xc.h>
+#include "usb_compiler.h"
 #include <stdint.h>
 #include "usb_config.h"
 
 
-/* ************************************************************************** */
 /* ************************ UEPn REGISTER BITS ****************************** */
 /* ************************************************************************** */
 
@@ -239,6 +238,21 @@
 #define BDT_BASE_ADDR   0xD00
 #define SETUP_DATA_ADDR 0x60
 #define EP_BUFFERS_STARTING_ADDR (BDT_BASE_ADDR + BDT_SIZE)
+#endif
+
+/*
+ * Size of the USB RAM window starting at BDT_BASE_ADDR. Only used by the SDCC
+ * build, which reserves the whole window in one block (see usb_compiler.h)
+ * because it cannot place the individual buffers.
+ */
+#if defined(_PIC14E)
+#define USB_RAM_SIZE 256
+#elif defined(_18F13K50) || defined(_18F14K50)
+#define USB_RAM_SIZE 256
+#elif defined(_18F24K50)||defined(_18F25K50)||defined(_18F45K50)
+#define USB_RAM_SIZE 256
+#elif defined(__J_PART)
+#define USB_RAM_SIZE 256
 #endif
 
 #if defined(_18F24K50)||defined(_18F25K50)||defined(_18F45K50)

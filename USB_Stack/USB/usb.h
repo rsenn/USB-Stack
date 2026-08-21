@@ -277,10 +277,19 @@ typedef struct
 extern usb_ustat_t             g_usb_last_USTAT;
 extern usb_ep_stat_t           g_usb_ep_stat[NUM_ENDPOINTS][2];
 
+/* All four are views of the same 8-byte SETUP packet; see usb_compiler.h for
+ * why SDCC gets pointer macros instead of aliased objects. */
+#if USB_SDCC
+#define g_usb_setup             USB_ABS_OBJ(ch9_setup_t,             SETUP_DATA_ADDR)
+#define g_usb_get_descriptor    USB_ABS_OBJ(ch9_get_descriptor_t,    SETUP_DATA_ADDR)
+#define g_usb_set_configuration USB_ABS_OBJ(ch9_set_configuration_t, SETUP_DATA_ADDR)
+#define g_usb_set_interface     USB_ABS_OBJ(ch9_set_interface_t,     SETUP_DATA_ADDR)
+#else
 extern ch9_setup_t             g_usb_setup             __at(SETUP_DATA_ADDR);
 extern ch9_get_descriptor_t    g_usb_get_descriptor    __at(SETUP_DATA_ADDR);
 extern ch9_set_configuration_t g_usb_set_configuration __at(SETUP_DATA_ADDR);
 extern ch9_set_interface_t     g_usb_set_interface     __at(SETUP_DATA_ADDR);
+#endif
 
 extern uint16_t                g_usb_bytes_available;
 extern uint16_t                g_usb_bytes_2_send;
@@ -289,7 +298,11 @@ extern bool                    g_usb_send_short;
 extern uint8_t                 g_usb_sending_from;
 extern const uint8_t          *g_usb_rom_ptr;
 extern uint8_t                *g_usb_ram_ptr;
+#if USB_SDCC
+#define g_usb_bd_table USB_ABS_ARR(bd_t, BDT_BASE_ADDR)
+#else
 extern bd_t                    g_usb_bd_table[NUM_BD] __at(BDT_BASE_ADDR);
+#endif
 
 /* ************************************************************************** */
 

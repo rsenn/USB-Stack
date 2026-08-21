@@ -1,6 +1,7 @@
 #ifndef FUSES_H
 #define FUSES_H
 
+#include "../USB/usb_compiler.h"
 #include "config.h"
 
 #if defined(_PIC14E)
@@ -127,10 +128,20 @@
 #pragma config IESO = OFF       // Internal/External Oscillator Switchover (Oscillator Switchover mode disabled)
 
 // CONFIG2L
+// XC8 spells these two settings nPWRTEN/nLPBOR; gpasm (SDCC) spells them
+// PWRTEN/LPBOR. Same bits, same ON/OFF sense.
+#if USB_SDCC
+#pragma config PWRTEN = ON      // Power-up Timer Enable (Power up timer enabled)
+#else
 #pragma config nPWRTEN = ON     // Power-up Timer Enable (Power up timer enabled)
+#endif
 #pragma config BOREN = ON       // Brown-out Reset Enable (BOR controlled by firmware (SBOREN is enabled))
 #pragma config BORV = 285       // Brown-out Reset Voltage (BOR set to 2.85V nominal)
+#if USB_SDCC
+#pragma config LPBOR = ON       // Low-Power Brown-out Reset (Low-Power Brown-out Reset enabled)
+#else
 #pragma config nLPBOR = ON      // Low-Power Brown-out Reset (Low-Power Brown-out Reset enabled)
+#endif
 
 // CONFIG2H
 #pragma config WDTEN = SWON     // Watchdog Timer Enable bits (WDT controlled by firmware (SWDTEN enabled))
@@ -202,7 +213,9 @@
 #elif defined(_18F26J53) || defined(_18F46J53) || defined(_18F27J53) || defined(_18F47J53)
 // CONFIG1L
 #pragma config WDTEN = OFF      // Watchdog Timer (Disabled - Controlled by SWDTEN bit)
-#ifndef __CLANG__
+// gpasm (SDCC) does not macro-expand inside #pragma config either, so it
+// takes the explicit ladder below just like the C99 path.
+#if !defined(__CLANG__) && !USB_SDCC
 #pragma config PLLDIV = XTAL_USED // Broken using C99
 #else
 #if XTAL_USED == MHz_4
@@ -268,7 +281,8 @@
 #endif
 
 
-#include <xc.h>
+/* Register definitions (xc.h or pic18fregs.h, depending on compiler). */
+#include "../USB/usb_compiler.h"
 
 #endif
 

@@ -23,6 +23,10 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+/* Brings in the register header and maps SDCC's part macros onto the
+ * XC8 names tested below. No effect on an XC8 build. */
+#include "../USB/usb_compiler.h"
+
 // Oscillator Options:
 // Define XTAL_USED as one of the following. NO_XTAL means internal oscillator 
 // is used (supported parts with ACT only), otherwise select the crystal value
@@ -320,7 +324,9 @@
 #define LED_OUPUT() LED_TRIS &= ~(1 << LED_BIT)
 
 // WPUE3 (pull-up for RE3/MCLRE) needs to be accessible with PIC18F2XK50 (28 pin devices).
-#if !defined(TRISE)
+// SDCC's pic18fregs.h declares TRISE as a variable rather than a macro, so the
+// !defined() probe cannot see it there - and it does not need this fixup anyway.
+#if !defined(TRISE) && !defined(__SDCC) && !defined(SDCC)
 #define TRISE TRISE
 uint8_t TRISE __at(0xF96); // This shouldn't be missing!!
 #endif
