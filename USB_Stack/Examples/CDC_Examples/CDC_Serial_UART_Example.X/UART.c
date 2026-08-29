@@ -5,7 +5,7 @@
  * Year:   2016
  */
 
-#include <xc.h>
+#include "../../../USB/usb_compiler.h"
 #include "UART.h"
 
 #ifdef PIC32MX795F512L
@@ -98,7 +98,7 @@ void UART1_Write_Text(uint8_t *UART_text){
 #endif
 
 
-#ifdef __XC8
+#ifndef PIC32MX795F512L
 #if NUM_UARTS >= 1
 /* ************************* UART1 ************************* */
 #ifdef BAUD_8BITS

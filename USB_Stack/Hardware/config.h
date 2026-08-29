@@ -324,11 +324,15 @@
 #define LED_OUPUT() LED_TRIS &= ~(1 << LED_BIT)
 
 // WPUE3 (pull-up for RE3/MCLRE) needs to be accessible with PIC18F2XK50 (28 pin devices).
-// SDCC's pic18fregs.h declares TRISE as a variable rather than a macro, so the
-// !defined() probe cannot see it there - and it does not need this fixup anyway.
-#if !defined(TRISE) && !defined(__SDCC) && !defined(SDCC)
+// XC8's device headers omit TRISE for these parts (PORTE is just RE3/MCLR on
+// the 28-pin package); confirmed SDCC's pic18f25k50.h omits it too (this
+// used to be guarded !defined(__SDCC), on the assumption that SDCC's header
+// always declares TRISE as a plain variable where the !defined() probe can't
+// see it - that assumption doesn't hold for this chip, so both compilers
+// need the fallback).
+#if !defined(TRISE)
 #define TRISE TRISE
-uint8_t TRISE __at(0xF96); // This shouldn't be missing!!
+USB_AT_PRE(0xF96) uint8_t TRISE USB_AT_POST(0xF96); // This shouldn't be missing!!
 #endif
 
 

@@ -90,7 +90,7 @@
 #define NUM_UARTS 1
 #define UART1_TX_TRIS TRISBbits.TRISB7
 #define UART1_RX_TRIS TRISBbits.TRISB5
-#elif defined(__18F24K50) || defined(__18F25K50)||defined(__18F45K50)
+#elif defined(__18F24K50) || defined(_18F25K50) || defined(__18F45K50)
 #define BAUD_16BITS
 #define NUM_UARTS 1
 #define UART1_TX_TRIS TRISCbits.TRISC6

@@ -81,56 +81,186 @@
  * 
  */
 
-#include <xc.h>
+#include "../../../USB/usb_compiler.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include "../../../Hardware/fuses.h"
 #include "../../../Hardware/config.h"
 #include "../../../USB/usb.h"
 #include "../../../USB/usb_cdc.h"
+#include "morse.h"
+
+/*
+ * Morse code demo (replaces the stock Hello World loop), both directions:
+ *
+ *  - Key -> serial: the board's own bootloader button doubles as a
+ *    straight key. Hold it down for a short "dot" or a long "dash",
+ *    release between elements/characters/words - the decoder in morse.c
+ *    has no fixed WPM, it learns your keying speed from the dot lengths
+ *    it sees and adapts as you speed up or slow down. Decoded text
+ *    streams out over the CDC serial port as you key it.
+ *
+ *  - Serial -> LED: any valid Morse character (A-Z, 0-9, or a space for a
+ *    word gap) sent to the CDC serial port is played back as dot/dash
+ *    blinks on the user LED, at the same speed morse.c has learned from
+ *    your own keying above. Anything that isn't valid Morse is dropped.
+ */
+#define DEBOUNCE_MS 20u
 
 static void example_init(void);
 static void flash_led(void);
-static void __interrupt() isr(void);
+static USB_ISR(isr);
 static void serial_print_string(char* string);
 static void serial_echo(void);
+static void timer0_init(void);
+static uint32_t get_ms_ticks(void);
+static void morse_task(void);
+static void serial_to_led_task(void);
+static void led_sync_task(void);
 
 static bool volatile m_serial_pkt_sent = true;
 static bool volatile m_serial_pkt_rcv = false;
+
+/* Written only by the Timer0 ISR, read only via get_ms_ticks() (which
+ * briefly disables interrupts) - a bare volatile read here could tear, since
+ * a 32-bit read/write is not atomic on an 8-bit core. */
+static uint32_t volatile g_ms_ticks = 0;
 
 void main(void)
 {
     example_init();
     flash_led();
-    
+    morse_init();
+    timer0_init();
+
     usb_init();
     INTCONbits.PEIE = 1;
     USB_INTERRUPT_FLAG = 0;
     USB_INTERRUPT_ENABLE = 1;
     INTCONbits.GIE = 1;
-    
+
     while(1)
     {
         while(usb_get_state() < STATE_CONFIGURED){} // Pause if not configured or suspended.
-        
-        // Hello World Example
-        while(BUTTON_RELEASED){}
-        serial_print_string("Hello World!\r\n");
-        while(BUTTON_PRESSED){}
-        
+
+        // Morse Code Demo: key -> decoded text out over serial.
+        morse_task();
+
+        // Morse Code Demo: text in over serial -> blinked out on the LED.
+        serial_to_led_task();
+        led_sync_task();
+
         // Loop-back Example
 //        serial_echo();
     }
-    
+
     return;
 }
 
-static void __interrupt() isr(void)
+static USB_ISR(isr)
 {
     if(USB_INTERRUPT_ENABLE && USB_INTERRUPT_FLAG)
     {
         usb_tasks();
         USB_INTERRUPT_FLAG = 0;
+    }
+    if(INTCONbits.TMR0IE && INTCONbits.TMR0IF)
+    {
+        // 16-bit Timer0, Fosc/4, 1:32 prescale -> 375 counts/ms at the
+        // stack's fixed 48MHz system clock (12MHz instruction clock).
+        // Reload high byte first, then low - PIC18's buffered 16-bit
+        // timer write commits both halves together on the low-byte write.
+        TMR0H = 0xFE;
+        TMR0L = 0x89;
+        INTCONbits.TMR0IF = 0;
+        g_ms_ticks++;
+    }
+}
+
+static void timer0_init(void)
+{
+    T0CON = 0x04; // 16-bit, internal Fosc/4 clock, 1:32 prescale, timer off
+    TMR0H = 0xFE;
+    TMR0L = 0x89;
+    INTCONbits.TMR0IF = 0;
+    INTCONbits.TMR0IE = 1;
+    T0CONbits.TMR0ON  = 1;
+}
+
+static uint32_t get_ms_ticks(void)
+{
+    uint32_t t;
+    INTCONbits.GIE = 0;
+    t = g_ms_ticks;
+    INTCONbits.GIE = 1;
+    return t;
+}
+
+static void morse_task(void)
+{
+    static uint8_t  candidate_down  = 0;
+    static uint8_t  stable_down     = 0;
+    static uint32_t candidate_since = 0;
+
+    uint32_t now      = get_ms_ticks();
+    uint8_t  raw_down = BUTTON_PRESSED ? 1u : 0u;
+
+    if(raw_down != candidate_down)
+    {
+        candidate_down  = raw_down;
+        candidate_since = now;
+    }
+    else if(candidate_down != stable_down && (now - candidate_since) >= DEBOUNCE_MS)
+    {
+        stable_down = candidate_down;
+        morse_key_edge(stable_down, now);
+    }
+
+    morse_poll(now);
+
+    while(morse_available())
+    {
+        char text[2];
+        text[0] = morse_getch();
+        text[1] = '\0';
+        serial_print_string(text);
+    }
+}
+
+/* Drains whatever the host just sent over CDC into the LED-playback queue,
+ * then re-arms the OUT endpoint for the next packet. cdc_data_out() (below)
+ * just raises m_serial_pkt_rcv - the received bytes themselves are already
+ * sitting in g_cdc_dat_ep_out[0..g_cdc_num_data_out-1] by the time it fires. */
+static void serial_to_led_task(void)
+{
+    if(m_serial_pkt_rcv)
+    {
+        uint8_t i;
+        for(i = 0; i < g_cdc_num_data_out; i++)
+        {
+            morse_led_send((char)g_cdc_dat_ep_out[i]);
+        }
+        m_serial_pkt_rcv = false;
+        cdc_arm_data_ep_out();
+    }
+}
+
+/* Pumps the LED playback state machine and drives the physical LED to
+ * match - only touching LED_ON()/LED_OFF() on an actual change, since
+ * morse.c itself never touches hardware (see morse.h). */
+static void led_sync_task(void)
+{
+    static uint8_t led_on = 0;
+    uint8_t        want;
+
+    morse_led_task(get_ms_ticks());
+
+    want = morse_led_is_on();
+    if(want != led_on)
+    {
+        led_on = want;
+        if(want) LED_ON();
+        else     LED_OFF();
     }
 }
 

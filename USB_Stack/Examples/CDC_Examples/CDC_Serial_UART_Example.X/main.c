@@ -81,7 +81,7 @@
  * 
  */
 
-#include <xc.h>
+#include "../../../USB/usb_compiler.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include "../../../Hardware/fuses.h"
@@ -92,7 +92,7 @@
 
 static void example_init(void);
 static void flash_led(void);
-static void __interrupt() isr(void);
+static USB_ISR(isr);
 static void vcp_tasks(void);
 
 #define RX_BUFFER_SIZE 64
@@ -138,7 +138,7 @@ void main(void)
     return;
 }
 
-static void __interrupt() isr(void)
+static USB_ISR(isr)
 {
     if(USB_INTERRUPT_ENABLE && USB_INTERRUPT_FLAG)
     {

@@ -109,7 +109,7 @@ static const config_descriptor_t config_descriptor0 =
         CS_INTERFACE,
         DESC_SUB_UNION,
         0x00,
-        0x01
+        {0x01}          // bSlaveInterface[NUM_SLAVE_INTERFACES] - SDCC needs the brace.
     },
     
     // Call Management Functional Descriptor
@@ -166,9 +166,9 @@ static const config_descriptor_t config_descriptor0 =
 };
 
 /** Configuration Descriptor Addresses Array */
-const uint16_t g_config_descriptors[] =
+const usb_desc_addr_t g_config_descriptors[] =
 {
-    (uint16_t)&config_descriptor0
+    USB_DESC_ADDR(&config_descriptor0)
 };
 
 /** String Zero Descriptor Structure */
@@ -236,13 +236,13 @@ static const serial_string_descriptor_t serial_string_descriptor =
 };
 
 /** String Descriptor Addresses Array */
-const uint16_t g_string_descriptors[] =
+const usb_desc_addr_t g_string_descriptors[] =
 {
-    (uint16_t)&string_zero_descriptor,
-    (uint16_t)&vendor_string_descriptor,
-    (uint16_t)&product_string_descriptor,
-    (uint16_t)&serial_string_descriptor
+    USB_DESC_ADDR(&string_zero_descriptor),
+    USB_DESC_ADDR(&vendor_string_descriptor),
+    USB_DESC_ADDR(&product_string_descriptor),
+    USB_DESC_ADDR(&serial_string_descriptor)
 };
 
 /** String Descriptor Addresses Array Size */
-const uint8_t g_size_of_sd = sizeof(g_string_descriptors);
+const uint8_t g_size_of_sd = sizeof(g_string_descriptors) / sizeof(g_string_descriptors[0]);
